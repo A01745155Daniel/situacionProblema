@@ -13,7 +13,24 @@ vector<string> separar(string linea);
 int main(int argc, char const *argv[])
 {
     ifstream entrada;
-    entrada.open("DatosPeliculas.csv");
+    //Excepcions
+    entrada.flags(ios_base::failbit);
+    entrada.exceptions(ios_base::failbit);
+    try
+    {
+        entrada.open("DatosPeliculas.csv");
+    }
+    catch(ifstream::failure &e)
+    {
+        cout << "ERROR excepcion al abrir el archivo" << endl;
+        return -1;
+    }
+    //entrada.open("DatosPeliculas.csv");
+    /*if (entrada.fail())
+    {
+        cout << "error, no puedo leer el archivo" << endl;
+        return -1; //Error
+    }*/
     string linea;
     int numeroLinea = 1;
     while (getline(entrada, linea))
@@ -31,7 +48,14 @@ int main(int argc, char const *argv[])
         }
         cout << endl;
     }
-    entrada.close();
+    try
+    {
+        entrada.close();
+    }
+    catch(ifstream::failure &e)
+    {
+
+    }
     return 0;
 }
 vector<string> separar(string linea)
@@ -47,6 +71,20 @@ vector<string> separar(string linea)
             cout << dato << numeroTokens <<endl;
             tokens.push_back(dato); //Guarda en el vector
             numeroTokens++;
+        }
+    }
+    bool incorrecto = true;
+    while (incorrecto)
+    {
+        try
+        {
+            cout << "tokens: " << tokens.at(tokens.size())<<endl;
+            incorrecto = false;
+        }
+        catch (out_of_range &e)
+        {
+            cout << "indice incorrecto";
+            incorrecto = true;
         }
     }
     //cout << "Tokens: " << numeroTokens << endl << endl;
